@@ -1,7 +1,8 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 const uri = process.env.MONGODB_URI
 
-console.log('Connecting to database URI: ', uri)
+console.log('Connecting to database...')
 
 mongoose
     .connect(uri)
