@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Person = require('./modules/person')
+const Person = require('./models/person')
 
 function check_args() {
     if (process.argv.length <= 2) {
