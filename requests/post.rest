@@ -1,7 +1,7 @@
-POST http://localhost:3001/api/persons
+POST http://fullstackcourse-phonebook-vbjk.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "Another New Person",
-    "number": "+421 908 123 456 789"
+    "name": "Person 5",
+    "number": "Duplicate with new number"
 }
