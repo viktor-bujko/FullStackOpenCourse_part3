@@ -15,9 +15,17 @@ app.use(morgan(':method :url :status :res[content-length] :response-time ms :bod
 const errorHandler = (error, request, response, next) => {
   console.error(`MY LOG: ${error.message}`)
 
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } 
+  /*if (error.name === 'CastError') {
+    return response.status(400).json({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }*/
+
+  switch (error.name) {
+    case 'CastError': return response.status(400).json({ error: 'malformatted id' })
+    case 'ValidationError': return response.status(400).json({ error: error.message })
+    default: break
+  }
 
   next(error)
 }
@@ -33,10 +41,7 @@ app.get(
           response.json(notes)
           console.log('Returned phonebook to the response')
         })
-        .catch(error => {
-          console.log('An error occured: ', error.message)
-          response.status(500).send('<h1>Internal server error occured &ndash; data could not be fetched from the database.</h1>')
-        })
+        .catch(error => next(error))
   }
 )
 
@@ -66,6 +71,7 @@ app.post(
 
       person
         .save()
+        .then(savedPerson => savedPerson.toJSON())
         .then(saved => {
           response.json(saved)
         })
