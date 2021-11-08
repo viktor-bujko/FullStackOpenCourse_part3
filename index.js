@@ -13,13 +13,6 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
 
 const errorHandler = (error, request, response, next) => {
-  console.error(`MY LOG: ${error.message}`)
-
-  /*if (error.name === 'CastError') {
-    return response.status(400).json({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
-  }*/
 
   switch (error.name) {
     case 'CastError': return response.status(400).json({ error: 'malformatted id' })
@@ -101,15 +94,12 @@ app.put(
     let updatedPerson = request.body
 
     Person
-      .findOneAndUpdate(request.params.id, updatedPerson, { new: true })
+      .findByIdAndUpdate(request.params.id, updatedPerson, { new: true, runValidators: true })
       .then(updated => {
         console.log('Update successful: ', updated)
         response.json(updated)
       })
-      .catch(error => {
-        console.log('Something went wrong', error.message)
-        next(error)
-      })
+      .catch(error => next(error))
 })
 
 app.delete(
@@ -149,9 +139,7 @@ app.get(
     }
 )
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
+const unknownEndpoint = (request, response) => response.status(404).send({ error: 'unknown endpoint' })
 
 // handler of requests with unknown endpoint
 app.use(unknownEndpoint)
