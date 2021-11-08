@@ -25,6 +25,7 @@ const errorHandler = (error, request, response, next) => {
 app.get(
   '/api/persons',
   (request, response) => {
+      console.log('URI: ', uri)
       Person
         .find({})
         .then(notes => {
