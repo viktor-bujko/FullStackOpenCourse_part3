@@ -22,6 +22,7 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
+
 app.get(
   '/api/persons',
   (request, response) => {
