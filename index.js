@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 require('dotenv').config()
-const uri = process.env.MONGODB_URI
 const Person = require('./models/person')
 const morgan = require('morgan')
 
@@ -27,7 +26,6 @@ const errorHandler = (error, request, response, next) => {
 app.get(
   '/api/persons',
   (request, response) => {
-      console.log('URI: ', uri)
       Person
         .find({})
         .then(notes => {
